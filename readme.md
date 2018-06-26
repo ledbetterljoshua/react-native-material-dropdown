@@ -12,8 +12,26 @@
 # react-native-material-dropdown
 
 [![npm][npm-badge]][npm-url]
-[![license][license-badge]][license-url]
-[![codeclimate][codeclimate-badge]][codeclimate-url]
+
+This is a fork of the project [react-native-material-dropdown](https://github.com/n4kz/react-native-material-dropdown/blob/master/src/components/dropdown/index.js), updated to allow for rendering of custom components using the render props method. 
+
+## New Usage
+
+```javascript
+<Dropdown
+  data={data}
+  renderBase={() => {
+    return (
+      <Card item={this.state.item} />
+    )
+  }}
+  renderItem={({ item, index, select }) => {
+    return (
+      <Card onPress={() => this.setState({item: item.value}, () => select(index))} item={item.value} />
+    )
+  }}
+/>
+```
 
 Material dropdown with consistent behaviour on iOS and Android
 
