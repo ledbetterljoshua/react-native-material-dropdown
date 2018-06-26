@@ -1,22 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import {
-  Text,
-  View,
-  FlatList,
-  Animated,
-  Modal,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Platform,
-  ViewPropTypes,
-  I18nManager,
-} from 'react-native';
+import { Animated, Dimensions, FlatList, I18nManager, Modal, Platform, Text, TouchableWithoutFeedback, View, ViewPropTypes } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import { TextField } from 'react-native-material-textfield';
-
 import DropdownItem from '../item';
 import styles from './styles';
+
 
 export default class Dropdown extends PureComponent {
   static defaultProps = {
@@ -503,7 +492,7 @@ export default class Dropdown extends PureComponent {
       title:
       String(title);
 
-    return (
+    return props.renderBase && props.renderBase() || (
       <TextField
         label=''
         labelHeight={dropdownOffset.top - Platform.select({ ios: 1, android: 2 })}
@@ -752,7 +741,7 @@ export default class Dropdown extends PureComponent {
                 ref={this.updateScrollRef}
                 data={data}
                 style={styles.scroll}
-                renderItem={this.renderItem}
+                renderItem={this.props.renderItem || this.renderItem}
                 keyExtractor={this.keyExtractor}
                 scrollEnabled={visibleItemCount < itemCount}
                 contentContainerStyle={styles.scrollContainer}
