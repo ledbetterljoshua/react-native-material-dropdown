@@ -152,7 +152,6 @@ export default class Dropdown extends PureComponent {
     this.onSelect = this.onSelect.bind(this);
     this.onLayout = this.onLayout.bind(this);
 
-    this.updateRippleRef = this.updateRef.bind(this, 'ripple');
     this.updateContainerRef = this.updateRef.bind(this, 'container');
     this.updateScrollRef = this.updateRef.bind(this, 'scroll');
 
@@ -213,12 +212,13 @@ export default class Dropdown extends PureComponent {
     let timestamp = Date.now();
 
     if (null != event) {
+      event.persist()
       /* Adjust event location */
-      event.nativeEvent.locationY -= this.rippleInsets().top;
-      event.nativeEvent.locationX -= this.rippleInsets().left;
+      event.locationY -= this.rippleInsets().top;
+      event.locationX -= this.rippleInsets().left;
 
       /* Start ripple directly from event */
-      this.ripple.startRipple(event);
+      // this.ripple.startRipple(event);
     }
 
     if (!itemCount) {
@@ -398,7 +398,7 @@ export default class Dropdown extends PureComponent {
     let {
       top = 16,
       right = 0,
-      bottom = -8,
+      bottom = 0,
       left = 0,
     } = this.props.rippleInsets || {};
 
@@ -492,7 +492,7 @@ export default class Dropdown extends PureComponent {
       title:
       String(title);
 
-    return props.renderBase && props.renderBase() || (
+    return (
       <TextField
         label=''
         labelHeight={dropdownOffset.top - Platform.select({ ios: 1, android: 2 })}
@@ -619,9 +619,11 @@ export default class Dropdown extends PureComponent {
 
     return (
       <DropdownItem index={index} {...props}>
-        <Text style={[styles.item, itemTextStyle, textStyle]} numberOfLines={1}>
+      
+      {this.props.renderItem({item, index, select: this.onSelect})}
+        {/* <Text style={[styles.item, itemTextStyle, textStyle]} numberOfLines={1}>
           {title}
-        </Text>
+        </Text> */}
       </DropdownItem>
     );
   }
@@ -706,7 +708,6 @@ export default class Dropdown extends PureComponent {
       disabled,
       hitSlop,
       pressRetentionOffset,
-      onPress: this.onPress,
       testID,
       nativeID,
       accessible,
@@ -715,10 +716,10 @@ export default class Dropdown extends PureComponent {
 
     return (
       <View onLayout={this.onLayout} ref={this.updateContainerRef} style={containerStyle}>
-        <TouchableWithoutFeedback {...touchableProps}>
+        <TouchableWithoutFeedback {...touchableProps} onPress={this.onPress}>
           <View pointerEvents='box-only'>
             {this.renderBase(props)}
-            {this.renderRipple()}
+            {/* {this.renderRipple()} */}
           </View>
         </TouchableWithoutFeedback>
 
@@ -741,7 +742,7 @@ export default class Dropdown extends PureComponent {
                 ref={this.updateScrollRef}
                 data={data}
                 style={styles.scroll}
-                renderItem={({item, index}) => this.props.renderItem({item, index, select: this.onSelect}) || this.renderItem({item, index})}
+                renderItem={this.renderItem}
                 keyExtractor={this.keyExtractor}
                 scrollEnabled={visibleItemCount < itemCount}
                 contentContainerStyle={styles.scrollContainer}

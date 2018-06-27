@@ -1,6 +1,6 @@
 {
   "name": "react-native-material-dropdown-w-render-props",
-  "version": "0.11.1",
+  "version": "1.0.0",
   "license": "BSD-3-Clause",
   "author": "Joshua Ledbetter <ledbetterljoshua@gmail.com>",
   "description": "Material dropdown",
